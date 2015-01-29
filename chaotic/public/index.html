@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>Chaotic HTTP</title>
+    <link type="text/css" rel="stylesheet" href="normalize.css" />
+    <link type="text/css" rel="stylesheet" href="skeleton.css" />
+    <link type="text/css" rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+	<h1>Chaotic HTTP</h1>
+      </header>
+
+      <form action="/chaotic" method="POST">
+	<div class="row">
+	  <div class="six columns">
+	    <label for="delay">
+	      Delay (in <a href="http://golang.org/pkg/time/#ParseDuration">time.ParseDuration</a> format)
+	    </label>
+	    <input class="u-full-width" name="Delay" type="text" value="" disabled />
+	  </div>
+	  <div class="six columns">
+	    <label for="failrate">
+	      Probability of Delay (0.0-1.0)
+	    </label>
+	    <input class="u-full-width" name="DelayP" type="text" value="" disabled />
+	  </div>
+	</div>
+
+	<div class="row buttons">
+	  <input class="button-primary" type="submit" value="Save" disabled />
+	</div>
+      </form>
+    </div>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+  </body>
+</html>
