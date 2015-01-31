@@ -8,7 +8,7 @@ import (
 
 // policyAPI implements HTTP API providing read/write access to policy data
 type policyAPI struct {
-	p *policy
+	p *Policy
 }
 
 func (api *policyAPI) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -32,7 +32,7 @@ func (api *policyAPI) show(w http.ResponseWriter, r *http.Request) {
 }
 
 func (api *policyAPI) update(w http.ResponseWriter, r *http.Request) {
-	var np policy
+	var np Policy
 
 	b, err := ioutil.ReadAll(r.Body)
 	if err == nil {
