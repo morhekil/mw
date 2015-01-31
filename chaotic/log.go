@@ -8,10 +8,11 @@ import (
 	"time"
 )
 
-const hist = 300
+const hist = 250
 
 // Action performed in regards to a single request
 type Action struct {
+	Index   int64
 	Time    time.Duration
 	Delayed bool
 	Failed  bool
@@ -25,6 +26,7 @@ type Log struct {
 
 // Push another action into the log
 func (l *Log) Push(a Action) {
+	a.Index = l.count
 	l.items[l.count%hist] = a
 	l.count++
 }

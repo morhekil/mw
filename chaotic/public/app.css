@@ -25,3 +25,8 @@ form fieldset {
 .hidden {
     display: none;
 }
+
+.error {
+    background-color: red;
+    color: white;
+}
