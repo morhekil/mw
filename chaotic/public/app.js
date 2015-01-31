@@ -1,15 +1,29 @@
-var Chaotic = function() {
-    var populate = function(policy) {
-	    $('form [name=Delay]').val(policy.Delay);
-	    $('form [name=DelayP]').val(policy.DelayP);
-	    $('form input').removeAttr('disabled');
-    }
+var Chaotic = {
+    enableForm: function() {
+	$('form input').removeAttr('disabled');
+	$('#spin').hide();
+	$('#save').show();
+    },
 
-    var load = function() {
-	$.getJSON("policy", populate);
-    };
+    disableForm: function() {
+	$('form input').attr('disabled', true);
+	$('#save').hide();
+	$('#spin').show();
+    },
 
-    var save = function() {
+    populate: function(policy) {
+	$('form [name=Delay]').val(policy.Delay);
+	$('form [name=DelayP]').val(policy.DelayP);
+	this.enableForm();
+    },
+
+    load: function() {
+	var that = this;
+	$.getJSON("policy",
+		  function(data) { that.populate(data); });
+    },
+
+    save: function() {
 	// Serializing the form into JSON data
 	var v = function(name) { return $('form input[name='+name+']').val() };
 	var data = {
@@ -17,20 +31,24 @@ var Chaotic = function() {
 	    DelayP: parseFloat(v('DelayP'))
 	}
 
-	$.post("policy", JSON.stringify(data), populate);
-    };
+	this.disableForm();
+	var that = this;
+	$.post("policy", JSON.stringify(data),
+	       function(data) { that.populate(data); });
+    },
 
-    var listen = function() {
+    listen: function() {
+	var that = this;
 	$('form').on('submit', function(event) {
 	    event.preventDefault();
-	    save();
+	    that.save();
 	});
+    },
+
+    init: function() {
+	this.load();
+	this.listen();
     }
-	    
-    load();
-    listen();
 };
 
-$(function() {
-    Chaotic();
-});
+$(function() { Chaotic.init(); });
