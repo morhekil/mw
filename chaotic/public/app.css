@@ -40,8 +40,10 @@ form fieldset {
     color: white;
 }
 
-#log {
-    position: relative;
+#log { position: relative; }
+#log svg {
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
 }
 
 .annotate {
@@ -51,4 +53,36 @@ form fieldset {
     bottom: -4.4em;
     line-height: 1.3em;
     width: 100%;
+}
+
+.legend {
+    position: absolute;
+    top: -2.5em;
+    font-size: 1.0rem;
+}
+.legend .delayed { color: orange; }
+.legend .failed { color: red; }
+
+.legend dt, .legend dd { float: left; }
+.legend dd { margin-right: 1em; margin-left: 0.25em; }
+
+.controls {
+    position: absolute;
+    margin-bottom: 0;
+    list-style: none;
+    font-size: 1.0rem;
+    right: 0;
+    top: -1.6em;
+}
+
+.controls li {
+    float: left;
+    margin-left: 1em;
+}
+
+.controls button {
+    padding: 0 0.3em;
+    font-size: 0.8rem;
+    height: 1.5em;
+    line-height: 1.5em;
 }

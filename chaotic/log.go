@@ -34,6 +34,15 @@ func (l *Log) Push(a Action) {
 
 // Export current log data as JSON array
 func (l *Log) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "POST":
+		l.clear(w, r)
+	default:
+		l.export(w, r)
+	}
+}
+
+func (l *Log) export(w http.ResponseWriter, r *http.Request) {
 	min := l.count - hist
 	if min < 0 {
 		min = 0
@@ -49,4 +58,9 @@ func (l *Log) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		res[i-min] = string(s)
 	}
 	fmt.Fprintf(w, "[%s]", strings.Join(res, ",\n"))
+}
+
+func (l *Log) clear(w http.ResponseWriter, r *http.Request) {
+	l.count = 0
+	fmt.Fprintf(w, "OK")
 }

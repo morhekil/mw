@@ -176,19 +176,42 @@ Chaotic.Log = {
 	this.width = $('.container')[0].getBoundingClientRect().width;
 	this.canvas.attr('width', this.width);
 	this.x = d3.scale.linear().range([0, this.width - this.barw])
+	this.y = d3.scale.log().clamp(true).range([0, this.height])
     },
 
-    init: function() {
+    clear: function(e) {
+	console.log('clearing');
+	e.preventDefault();
+	var btn = $('#clear');
+	btn.removeClass('button-primary').attr('disabled', true);
+	$.post('log', function() {
+	    btn.addClass('button-primary').removeAttr('disabled');
+	});
+    },
+
+    initCanvas: function() {
 	var that = this;
 	this.canvas = d3.select('#log').append('svg:svg')
 	    .attr('height', this.height)
 	    .on('mouseover', function() { that.paused = true; })
 	    .on('mouseout', function() { that.paused = false; });
 	this.scaleCanvas();
+    },
 
-	this.y = d3.scale.log().clamp(true).range([0, this.height])
+    initControls: function() {
+	var that = this;
+	$('#clear').on('click', function(e) { that.clear(e); });
+	$('#live').on('change', function() {
+	    that.live = $(this).prop('checked');
+	});
+    },
+    
+    init: function() {
+	var that = this;
+	this.initCanvas();
+	this.initControls();
+
 	that.load();
-	
 	window.setInterval(function() {
 	    if (that.live && !that.paused) { that.load(); }
 	}, 500);
