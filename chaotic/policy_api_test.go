@@ -1,6 +1,7 @@
 package chaotic_test
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -57,4 +58,24 @@ func TestPolicyApiPostMalformed(t *testing.T) {
 		strings.NewReader(`error`))
 	require.NoError(t, err)
 	require.Equal(t, res.StatusCode, 500)
+}
+
+func TestPolicyApiLog(t *testing.T) {
+	s := testServer()
+	for i := 0; i < 5; i++ {
+		_, err := http.Get(s.URL + "/ping")
+		require.NoError(t, err)
+	}
+
+	res, err := http.Get(s.URL + "/chaotic/log")
+	require.NoError(t, err)
+	require.Equal(t, 200, res.StatusCode)
+
+	l := make([]chaotic.Action, 5)
+	err = json.Unmarshal([]byte(resBody(t, res)), &l)
+	require.NoError(t, err)
+
+	for i := 0; i < 5; i++ {
+		require.NotEqual(t, chaotic.Action{}, l[i])
+	}
 }

@@ -15,6 +15,7 @@ func Handler(url string) func(h http.Handler) http.Handler {
 func mux(url string, h http.Handler, p Policy) http.Handler {
 	mux := http.NewServeMux()
 	mux.Handle(url+"/policy", &policyAPI{&p})
+	mux.Handle(url+"/log", &p.Log)
 	mux.Handle(url+"/", assets(url))
 	mux.Handle("/", &p)
 

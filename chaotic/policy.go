@@ -14,6 +14,8 @@ type Policy struct {
 	FailureP float32
 	// Custom function to implement the delay, defaults to time.Sleep.
 	DelayFunc func(time.Duration) `json:"-"`
+	// Log of processed actions
+	Log Log `json:"-"`
 	// converted value of Delay
 	delay time.Duration
 	// ServeMux to serve this policy as http middleware
@@ -21,14 +23,29 @@ type Policy struct {
 }
 
 func (p *Policy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	var next http.HandlerFunc
-	if p.mux != nil {
-		next = p.mux.ServeHTTP
-	} else {
-		next = http.NotFound
+	hf := p.next()
+	a := Action{}
+	t := time.Now()
+
+	if p.delay != 0 && rand.Float32() < p.DelayP {
+		a.Delayed = true
+		p.execDelay()
 	}
-	h := p.execute(next)
-	h(w, r)
+	if rand.Float32() < p.FailureP {
+		a.Failed = true
+		hf = p.execFailure()
+	}
+
+	a.Time = time.Since(t)
+	p.Log.Push(a)
+	hf(w, r)
+}
+
+func (p *Policy) next() http.HandlerFunc {
+	if p.mux != nil {
+		return p.mux.ServeHTTP
+	}
+	return http.NotFound
 }
 
 // Update policy with a new set of parameters.
@@ -45,17 +62,6 @@ func (p *Policy) update(np Policy) error {
 	p.delay = np.delay
 
 	return nil
-}
-
-func (p *Policy) execute(hf http.HandlerFunc) http.HandlerFunc {
-	if p.delay != 0 && rand.Float32() < p.DelayP {
-		p.execDelay()
-	}
-	if rand.Float32() < p.FailureP {
-		return p.execFailure()
-	}
-
-	return hf
 }
 
 // Validate should be called to validate public policy data
