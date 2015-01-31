@@ -6,12 +6,12 @@ import (
 	"net/http"
 )
 
-// PolicyAPI implements HTTP API providing read/write access to policy data
-type PolicyAPI struct {
-	p *Policy
+// policyAPI implements HTTP API providing read/write access to policy data
+type policyAPI struct {
+	p *policy
 }
 
-func (api *PolicyAPI) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (api *policyAPI) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	switch r.Method {
 	case "POST":
@@ -22,7 +22,7 @@ func (api *PolicyAPI) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (api *PolicyAPI) show(w http.ResponseWriter, r *http.Request) {
+func (api *policyAPI) show(w http.ResponseWriter, r *http.Request) {
 	j, err := json.Marshal(api.p)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
@@ -31,14 +31,17 @@ func (api *PolicyAPI) show(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (api *PolicyAPI) update(w http.ResponseWriter, r *http.Request) {
+func (api *policyAPI) update(w http.ResponseWriter, r *http.Request) {
+	var np policy
+
 	b, err := ioutil.ReadAll(r.Body)
 	if err == nil {
-		err = json.Unmarshal(b, api.p)
+		err = json.Unmarshal(b, &np)
 	}
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 	} else {
+		api.p.update(np)
 		api.show(w, r)
 	}
 }

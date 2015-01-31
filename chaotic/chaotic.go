@@ -6,25 +6,23 @@ import (
 	"github.com/elazarl/go-bindata-assetfs"
 )
 
-// Policy describe the desired chaotic behaviour
-type Policy struct {
-	Delay  string
-	DelayP float32
-}
-
 // Handler installs its own http routes, and returns
 // http.Handler with a potentially chaotic behaviour
 func Handler(url string) func(h http.Handler) http.Handler {
 	return func(h http.Handler) http.Handler {
-		p := Policy{}
-		mux := http.NewServeMux()
-
-		mux.Handle(url+"/policy", &PolicyAPI{&p})
-		mux.Handle(url+"/", assets(url))
-		mux.Handle("/", h)
-
-		return mux
+		p := policy{}
+		p.mux = mux(url, h, p)
+		return &p
 	}
+}
+
+func mux(url string, h http.Handler, p policy) http.Handler {
+	mux := http.NewServeMux()
+	mux.Handle(url+"/policy", &policyAPI{&p})
+	mux.Handle(url+"/", assets(url))
+	mux.Handle("/", p.execute(h))
+
+	return mux
 }
 
 func assets(url string) http.Handler {
