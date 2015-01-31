@@ -1,6 +1,15 @@
 .header {
     text-align: center;
-    padding-bottom: 2em;
+    padding-bottom: 1em;
+}
+
+form {
+    font-size: 80%;
+}
+
+form input[type=text] {
+    padding: 0.2em 0.5em;
+    height: 2em;
 }
 
 form .buttons {
@@ -12,7 +21,7 @@ form label, form legend {
 }
 
 form legend {
-    font-size: 2.4rem;
+    font-size: 110%;
     background-color: white;
     padding: 0 0.5em;
 }
@@ -29,4 +38,17 @@ form fieldset {
 .error {
     background-color: red;
     color: white;
+}
+
+#log {
+    position: relative;
+}
+
+.annotate {
+    position: absolute;
+    font-size: 1.2rem;
+    text-align: center;
+    bottom: -4.4em;
+    line-height: 1.3em;
+    width: 100%;
 }

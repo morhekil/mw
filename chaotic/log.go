@@ -16,6 +16,7 @@ type Action struct {
 	Time    time.Duration
 	Delayed bool
 	Failed  bool
+	Text    string
 }
 
 // Log of all requests processed

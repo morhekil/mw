@@ -1,6 +1,7 @@
 package chaotic
 
 import (
+	"fmt"
 	"math/rand"
 	"net/http"
 	"time"
@@ -37,6 +38,7 @@ func (p *Policy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	a.Time = time.Since(t)
+	a.Text = fmt.Sprintf("%s %s", r.Method, r.URL)
 	p.Log.Push(a)
 	hf(w, r)
 }
