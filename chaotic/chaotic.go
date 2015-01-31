@@ -1,10 +1,6 @@
 package chaotic
 
-import (
-	"net/http"
-
-	"github.com/elazarl/go-bindata-assetfs"
-)
+import "net/http"
 
 // Handler installs its own http routes, and returns
 // http.Handler with a potentially chaotic behaviour
@@ -23,13 +19,4 @@ func mux(url string, h http.Handler, p policy) http.Handler {
 	mux.Handle("/", p.execute(h))
 
 	return mux
-}
-
-func assets(url string) http.Handler {
-	a := &assetfs.AssetFS{
-		Asset:    Asset,
-		AssetDir: AssetDir,
-		Prefix:   "",
-	}
-	return http.StripPrefix(url, http.FileServer(a))
 }
