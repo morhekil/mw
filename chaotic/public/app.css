@@ -1,10 +1,25 @@
-header {
+.header {
     text-align: center;
     padding-bottom: 2em;
 }
 
 form .buttons {
     text-align: center;
+}
+
+form label, form legend {
+    font-weight: 300;
+}
+
+form legend {
+    font-size: 2.4rem;
+    background-color: white;
+    padding: 0 0.5em;
+}
+
+form fieldset {
+    border: 1px solid #ddd;
+    padding: 0.5em;
 }
 
 .hidden {

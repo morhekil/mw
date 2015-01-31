@@ -61,7 +61,7 @@ func TestDelayChancePolicy(t *testing.T) {
 func TestDelayNativeFunc(t *testing.T) {
 	p := chaotic.Policy{
 		Delay:  "300ms",
-		DelayP: 0.5,
+		DelayP: 1,
 	}
 	require.NoError(t, p.Validate())
 
@@ -74,4 +74,23 @@ func TestDelayNativeFunc(t *testing.T) {
 	res, err := http.Get(s.URL + "/ping")
 	require.NoError(t, err)
 	require.Equal(t, 404, res.StatusCode)
+}
+
+func TestFailureChancePolicy(t *testing.T) {
+	p := chaotic.Policy{
+		FailureP: 0.5,
+	}
+	require.NoError(t, p.Validate())
+
+	s := httptest.NewServer(&p)
+	c := 0
+	for i := 0; i < 30; i++ {
+		res, err := http.Get(s.URL + "/ping")
+		require.NoError(t, err)
+		if res.StatusCode == 500 {
+			c++
+		}
+	}
+	// with 50% probability, we should have seen failure 15 +/- 13 times
+	require.InDelta(t, 15, c, 13)
 }

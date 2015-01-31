@@ -12,8 +12,9 @@ var Chaotic = {
     },
 
     populate: function(policy) {
-	$('form [name=Delay]').val(policy.Delay);
-	$('form [name=DelayP]').val(policy.DelayP);
+	["Delay", "DelayP", "FailureP"].forEach(function(s) {
+	    $('form [name='+s+']').val(policy[s]);
+	});
 	this.enableForm();
     },
 
@@ -28,7 +29,8 @@ var Chaotic = {
 	var v = function(name) { return $('form input[name='+name+']').val() };
 	var data = {
 	    Delay: v('Delay'),
-	    DelayP: parseFloat(v('DelayP'))
+	    DelayP: parseFloat(v('DelayP')),
+	    FailureP: parseFloat(v('FailureP'))
 	}
 
 	this.disableForm();

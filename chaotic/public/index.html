@@ -8,29 +8,38 @@
   </head>
   <body>
     <div class="container">
-      <header>
+      <div class="header">
 	<h1>Chaotic HTTP</h1>
-      </header>
+      </div>
 
       <form action="/chaotic" method="POST">
 	<div class="row">
+
 	  <div class="six columns">
-	    <label for="delay">
-	      Delay (in <a href="http://golang.org/pkg/time/#ParseDuration">time.ParseDuration</a> format)
-	    </label>
-	    <input class="u-full-width" name="Delay" type="text" value="" disabled />
+	    <fieldset>
+	      <legend>Delay</legend>
+	      <label>probability (0.0-1.0)</label>
+	      <input class="u-full-width" name="DelayP" type="text" value="" disabled />
+	      <label>
+		duration (in <a href="http://golang.org/pkg/time/#ParseDuration">time.ParseDuration</a> format)
+	      </label>
+	      <input class="u-full-width" name="Delay" type="text" value="" disabled />
+	    </fieldset>
 	  </div>
+
 	  <div class="six columns">
-	    <label for="failrate">
-	      Probability of Delay (0.0-1.0)
-	    </label>
-	    <input class="u-full-width" name="DelayP" type="text" value="" disabled />
+	    <fieldset>
+	      <legend>Failure</legend>
+	      <label>probability (0.0-1.0)</label>
+	      <input class="u-full-width" name="FailureP" type="text" value="" disabled />
+	    </fieldset>
 	  </div>
+
 	</div>
 
 	<div class="row buttons">
-	  <button id="spin" class="hidden button" disabled>...</button>
 	  <input id="save" class="button-primary" type="submit" value="Save" />
+	  <button id="spin" class="hidden button" disabled>...</button>
 	</div>
       </form>
     </div>

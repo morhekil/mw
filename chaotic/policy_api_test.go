@@ -28,26 +28,26 @@ func testServer() *httptest.Server {
 func TestPolicyApiGet(t *testing.T) {
 	res, err := http.Get(testServer().URL + "/chaotic/policy")
 	require.NoError(t, err)
-	require.Equal(t, `{"Delay":"","DelayP":0}`, resBody(t, res))
+	require.Equal(t, `{"Delay":"","DelayP":0,"FailureP":0}`, resBody(t, res))
 }
 
 func TestPolicyApiPost(t *testing.T) {
 	res, err := http.Post(testServer().URL+"/chaotic/policy",
 		"application/json",
-		strings.NewReader(`{"Delay":"5s","DelayP":0.5}`))
+		strings.NewReader(`{"Delay":"5s","DelayP":0.5,"FailureP":0.3}`))
 	require.NoError(t, err)
 
-	require.Equal(t, `{"Delay":"5s","DelayP":0.5}`,
+	require.Equal(t, `{"Delay":"5s","DelayP":0.5,"FailureP":0.3}`,
 		resBody(t, res))
 }
 
 func TestPolicyApiPostWrong(t *testing.T) {
 	res, err := http.Post(testServer().URL+"/chaotic/policy",
 		"application/json",
-		strings.NewReader(`{"Delay":"boom","DelayP":0.5}`))
+		strings.NewReader(`{"Delay":"boom","DelayP":0.5,"FailureP":0.3}`))
 	require.NoError(t, err)
 
-	require.Equal(t, `{"Delay":"","DelayP":0}`,
+	require.Equal(t, `{"Delay":"","DelayP":0,"FailureP":0}`,
 		resBody(t, res))
 }
 
