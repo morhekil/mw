@@ -78,7 +78,9 @@ Chaotic.Log = {
     indexFn: function(d) { return d.Index },
     
     color: function(d) {
-	if (this.focused && this.focused != d.Index) {
+	var unfocused = (this.focused && this.focused != d.Index) ||
+	    (this.filter && !d.Text.match(this.filter));
+	if (unfocused) {
 	    return '#ddd';
 	} else if (d.Failed) {
 	    return 'red';
@@ -101,8 +103,8 @@ Chaotic.Log = {
 
 	this.bars = this.canvas.selectAll('rect')
 	    .data(data, this.indexFn)
-	this.enter(this.bars);
-	this.transition(this.bars);
+	this.enter();
+	this.transition();
 	this.bars.exit().remove();
     },
 
@@ -141,9 +143,9 @@ Chaotic.Log = {
 	this.recolorise(1000);
     },
 
-    enter: function(bars) {
+    enter: function() {
 	var that = this;
-	bars.enter()
+	this.bars.enter()
 	    .append('svg:rect')
 	    .attr('x', function(d) { return that.x(d.Index + 1) })
 	    .attr('y', function(d) { return that.height - that.y(d.Time) })
@@ -154,9 +156,9 @@ Chaotic.Log = {
 	    .on('mouseout', function() { that.clearAnnotate(); })
     },
 
-    transition: function(bars) {
+    transition: function() {
 	var that = this;
-	bars.transition()
+	this.bars.transition()
 	    .attr('x', function(d) { return that.x(d.Index) })
 	    .attr('y', function(d) { return that.height - that.y(d.Time) })
 	    .attr('height', function(d) { return that.y(d.Time); })
@@ -203,6 +205,10 @@ Chaotic.Log = {
 	$('#clear').on('click', function(e) { that.clear(e); });
 	$('#live').on('change', function() {
 	    that.live = $(this).prop('checked');
+	});
+	$('#filter').on('keyup', function() {
+	    that.filter = new RegExp($(this).val(), 'i');
+	    that.recolorise(300);
 	});
     },
     
