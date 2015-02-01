@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-// Recover from panic when it happens in the application.
+// Recover from panic when it happened in the application.
 // Details of the panic are written into Stderr, together with
 // some information about the request- client's real IP address,
 // HTTP method and URL path.
