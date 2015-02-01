@@ -12,7 +12,7 @@ func realIP(req *http.Request) string {
 		addr = req.Header.Get("X-Forwarded-For")
 	}
 	if addr == "" {
-		addr = strings.SplitN(req.RemoteAddr, ":", 1)[0]
+		addr = strings.SplitN(req.RemoteAddr, ":", 2)[0]
 	}
 
 	return addr
