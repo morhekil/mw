@@ -25,11 +25,13 @@ type Log struct {
 	items [hist]Action
 }
 
-// Push another action into the log
-func (l *Log) Push(a Action) {
-	a.Index = l.count
-	l.items[l.count%hist] = a
-	l.count++
+// Pull next action out of the log channel
+func (l *Log) Pull(ch chan Action) {
+	for a := range ch {
+		a.Index = l.count
+		l.items[l.count%hist] = a
+		l.count++
+	}
 }
 
 // Export current log data as JSON array

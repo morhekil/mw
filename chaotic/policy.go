@@ -16,15 +16,17 @@ type Policy struct {
 	// Custom function to implement the delay, defaults to time.Sleep.
 	DelayFunc func(time.Duration) `json:"-"`
 	// Log of processed actions
-	Log Log `json:"-"`
+	Log *Log `json:"-"`
 	// converted value of Delay
 	delay time.Duration
-	// ServeMux to serve this policy as http middleware
-	mux http.Handler
+	// next to serve this policy as http middleware
+	next http.Handler
+	// channel for log messages
+	ch chan Action
 }
 
 func (p *Policy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	hf := p.next()
+	hf := p.upstream()
 	a := Action{}
 	t := time.Now()
 
@@ -39,13 +41,15 @@ func (p *Policy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	a.Time = time.Since(t)
 	a.Text = fmt.Sprintf("%s %s", r.Method, r.URL)
-	p.Log.Push(a)
+	if p.ch != nil {
+		p.ch <- a
+	}
 	hf(w, r)
 }
 
-func (p *Policy) next() http.HandlerFunc {
-	if p.mux != nil {
-		return p.mux.ServeHTTP
+func (p *Policy) upstream() http.HandlerFunc {
+	if p.next != nil {
+		return p.next.ServeHTTP
 	}
 	return http.NotFound
 }

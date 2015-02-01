@@ -180,7 +180,6 @@ Chaotic.Log = {
     },
 
     clear: function(e) {
-	console.log('clearing');
 	e.preventDefault();
 	var btn = $('#clear');
 	btn.removeClass('button-primary').attr('disabled', true);

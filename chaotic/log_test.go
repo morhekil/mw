@@ -22,8 +22,10 @@ func TestLogExport(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 
 	l := make([]chaotic.Action, 5)
-	err = json.Unmarshal([]byte(resBody(t, res)), &l)
+	b := resBody(t, res)
+	err = json.Unmarshal([]byte(b), &l)
 	require.NoError(t, err)
+	require.Equal(t, 5, len(l))
 
 	for i := 0; i < 5; i++ {
 		require.NotEqual(t, chaotic.Action{}, l[i])
