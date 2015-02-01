@@ -1,6 +1,10 @@
-.header {
+h1 {
     text-align: center;
-    padding-bottom: 1em;
+    margin-bottom: 1em;
+    background-color: #eee;
+    color: #000;
+    border-bottom: 1px solid #ccc;
+    font-size: 3.2rem;
 }
 
 form {
