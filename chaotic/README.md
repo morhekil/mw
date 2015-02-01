@@ -27,21 +27,21 @@ http.ListenAndServe(":1234",
 
 Or it can be cleanly composed with other middleware using
 [alice](https://github.com/justinas/alice).  For example, if we have
-middlewares called `logger` and `headers`, the full stack can be
+middlewares called `mw.Logger` and `mw.Recover`, the full stack can be
 composed with alice this way:
 
 ```go
 a := alice.New(
-	logger,
+	mw.Logger,
 	mw.Chaotic("/chaotic"),
-	headers,
+	mw.Recover,
 ).Then(app)
 http.ListenAndServe(":1234", a)
 ```
 
 Keep in mind, that chaotic will delay or fail middlewares installed after it,
 but will not affect middlewares installed earlier - e.g. in this example only
-`headers` middleware is affected by chaotic's behaviour, but `logger` will run
+`mw.Recover` middleware is affected by chaotic's behaviour, but `mw.Logger` will run
 unaffected every time. This can be used to inject the failure into the required
 part of the stack, or even introduce multiple points of failure by mounting
 their configuration pages under different URLs.
@@ -56,4 +56,4 @@ and you can achieve the same result by just talking to chaotic's API directly.
 
 Below is an example of the configuration page in action:
 
-![demo](http://f.falsum.me/image/411m1c0a2r04/chaotic.gif)
+![demo](http://f.falsum.me/image/3m2E0J3E3m2f/chaotic.gif)
