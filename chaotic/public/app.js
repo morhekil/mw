@@ -132,7 +132,13 @@ Chaotic.Log = {
     },
 
     annotate: function(d) {
-	$('#log .annotate').html(d.Text + "<br />" + this.nsToHuman(d.Time));
+	var t = [
+	    (new Date(d.Start)),
+	    d.Text,
+	    this.nsToHuman(d.Time)
+	].join("<br />")
+
+	$('#log .annotate').html(t);
 	this.focused = d.Index;
 	this.recolorise(1);
     },

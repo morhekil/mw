@@ -27,8 +27,9 @@ type Policy struct {
 
 func (p *Policy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	hf := p.upstream()
-	a := Action{}
-	t := time.Now()
+	a := Action{
+		Start: time.Now(),
+	}
 
 	if p.delay != 0 && rand.Float32() < p.DelayP {
 		a.Delayed = true
@@ -39,7 +40,7 @@ func (p *Policy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		hf = p.execFailure()
 	}
 
-	a.Time = time.Since(t)
+	a.Time = time.Since(a.Start)
 	a.Text = fmt.Sprintf("%s %s", r.Method, r.URL)
 	if p.ch != nil {
 		p.ch <- a

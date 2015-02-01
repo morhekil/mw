@@ -13,6 +13,7 @@ const hist = 250
 // Action performed in regards to a single request
 type Action struct {
 	Index   int64
+	Start   time.Time
 	Time    time.Duration
 	Delayed bool
 	Failed  bool
