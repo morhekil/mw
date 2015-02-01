@@ -19,9 +19,9 @@ app := http.NewServeMux()
 app.Handle("/", http.NotFoundHandler())
 
 http.ListenAndServe(":1234",
-    // wrap application handler with chaotic.H,
+    // wrap application handler with mw.Chaotic,
     // installing its pages under /chaotic URL
-    chaotic.H("/chaotic")(app),
+    mw.Chaotic("/chaotic")(app),
 )
 ```
 
@@ -33,8 +33,8 @@ composed with alice this way:
 ```go
 a := alice.New(
 	logger,
-	chaotic.H("/chaotic"),
-	    headers,
+	mw.Chaotic("/chaotic"),
+	headers,
 ).Then(app)
 http.ListenAndServe(":1234", a)
 ```

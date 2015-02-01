@@ -19,24 +19,24 @@ installed could be the following:
 	http.ListenAndServe(":1234",
 		// wrap application handler with chaotic.H,
 		// installing its pages under /chaotic URL
-		chaotic.H("/chaotic")(app),
+		mw.Chaotic("/chaotic")(app),
 	)
 
 Or it can be cleanly composed with other middleware using alice
 (https://github.com/justinas/alice). For example,
-if we have middlewares called "logger" and "headers", the full stack
+if we have middlewares called "mw.Logger" and "mw.Recover", the full stack
 can be composed with alice this way:
 
 	a := alice.New(
-		logger,
-		chaotic.H("/chaotic"),
-                headers,
+		mw.Logger,
+		mw.Chaotic("/chaotic"),
+                mw.Recover,
 	).Then(app)
 	http.ListenAndServe(":1234", a)
 
 Keep in mind, that chaotic will delay or fail middlewares installed after it,
 but will not affect middlewares installed earlier - e.g. in this example only
-headers middleware is affected by chaotic's behaviour, but logger will run
+mw.Recover middleware is affected by chaotic's behaviour, but mw.Logger will run
 unaffected every time. This can be used to inject the failure into the required
 part of the stack, or even introduce multiple points of failure by mounting
 their configuration pages under different URLs.
