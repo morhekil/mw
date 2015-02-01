@@ -39,15 +39,23 @@ form fieldset {
     display: none;
 }
 
-.error {
-    background-color: red;
-    color: white;
-}
-
 #log { position: relative; }
 #log svg {
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
+}
+
+.cross {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: 5rem;
+    color: red;
+    display: none;
+}
+
+.error .cross {
+    display: block;
 }
 
 .annotate {

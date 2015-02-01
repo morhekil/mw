@@ -166,7 +166,8 @@ Chaotic.Log = {
     load: function() {
 	var that = this;
 	d3.json("log", function(err, data) {
-	    if (err) { return $('#log').addClass('error').html(err); }
+	    if (err) { return $('#log').addClass('error'); }
+	    $('#log').removeClass('error');
 	    that.graph(data);
 	});
 
