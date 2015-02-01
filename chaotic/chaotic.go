@@ -7,6 +7,9 @@ It comes with a web page to monitor and configure its behaviour, which
 also includes a simple visualisation of requests going through the
 stack, and failures introduced.
 
+An example of a configuration page in action can be found on GitHub
+(https://github.com/morhekil/mw/tree/master/chaotic#chaotic).
+
 The minimum viable example of an application with chaotic middleware
 installed could be the following:
 
