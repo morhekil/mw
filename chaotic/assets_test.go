@@ -12,7 +12,7 @@ import (
 
 func TestAssetsServer(t *testing.T) {
 	base := "/chaotic"
-	c := chaotic.Handler(base)
+	c := chaotic.H(base)
 	s := httptest.NewServer(c(http.NotFoundHandler()))
 
 	fs, _ := ioutil.ReadDir("./public")

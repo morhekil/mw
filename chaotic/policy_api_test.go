@@ -20,7 +20,7 @@ func resBody(t *testing.T, res *http.Response) string {
 }
 
 func testServer() *httptest.Server {
-	c := chaotic.Handler("/chaotic")
+	c := chaotic.H("/chaotic")
 	s := httptest.NewServer(c(http.NotFoundHandler()))
 	return s
 }

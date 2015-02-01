@@ -1,4 +1,4 @@
-package chaotic
+package bindata
 
 import (
 	"bytes"

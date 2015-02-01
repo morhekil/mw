@@ -19,14 +19,13 @@ type Action struct {
 	Text    string
 }
 
-// Log of all requests processed
-type Log struct {
+type logger struct {
 	count int64
 	items [hist]Action
 }
 
-// Pull next action out of the log channel
-func (l *Log) Pull(ch chan Action) {
+// Pull logged actions out of the log channel and save them
+func (l *logger) Pull(ch chan Action) {
 	for a := range ch {
 		a.Index = l.count
 		l.items[l.count%hist] = a
@@ -34,8 +33,8 @@ func (l *Log) Pull(ch chan Action) {
 	}
 }
 
-// Export current log data as JSON array
-func (l *Log) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+// ServeHTTP handles log-related HTTP API - exporting and clearing log data
+func (l *logger) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
 		l.clear(w, r)
@@ -44,7 +43,7 @@ func (l *Log) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (l *Log) export(w http.ResponseWriter, r *http.Request) {
+func (l *logger) export(w http.ResponseWriter, r *http.Request) {
 	min := l.count - hist
 	if min < 0 {
 		min = 0
@@ -62,7 +61,7 @@ func (l *Log) export(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "[%s]", strings.Join(res, ",\n"))
 }
 
-func (l *Log) clear(w http.ResponseWriter, r *http.Request) {
+func (l *logger) clear(w http.ResponseWriter, r *http.Request) {
 	l.count = 0
 	fmt.Fprintf(w, "OK")
 }

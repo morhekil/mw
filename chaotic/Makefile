@@ -1,7 +1,7 @@
 all: 	clean bindata.go
 
 clean:
-	rm -f bindata.go
+	rm -f ./bindata/bindata.go
 
 bindata.go:
-	go-bindata -pkg=chaotic -prefix=public public
+	go-bindata -pkg=bindata -o ./bindata/bindata.go -prefix=public public

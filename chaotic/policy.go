@@ -16,7 +16,7 @@ type Policy struct {
 	// Custom function to implement the delay, defaults to time.Sleep.
 	DelayFunc func(time.Duration) `json:"-"`
 	// Log of processed actions
-	Log *Log `json:"-"`
+	logger *logger
 	// converted value of Delay
 	delay time.Duration
 	// next to serve this policy as http middleware
