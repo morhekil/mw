@@ -3,8 +3,8 @@ package mw_test
 import (
 	"net/http"
 
-	"github.com/bryfry/mw"
 	"github.com/justinas/alice"
+	"github.com/morhekil/mw"
 )
 
 func Example() {
