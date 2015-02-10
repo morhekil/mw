@@ -3,8 +3,8 @@ package mw_test
 import (
 	"net/http"
 
+	"github.com/bryfry/mw"
 	"github.com/justinas/alice"
-	"github.com/morhekil/mw"
 )
 
 func Example() {
@@ -19,6 +19,7 @@ func Example() {
 	a := alice.New(
 		mw.Recover,
 		mw.Logger,
+		mw.Gzip,
 		mw.Chaotic("/chaotic"),
 		mw.Headers(hs),
 	).Then(app)
