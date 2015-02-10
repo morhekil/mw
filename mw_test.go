@@ -19,8 +19,8 @@ func Example() {
 	a := alice.New(
 		mw.Recover,
 		mw.Logger,
-		mw.Gzip,
 		mw.Chaotic("/chaotic"),
+		mw.Gzip,
 		mw.Headers(hs),
 	).Then(app)
 
