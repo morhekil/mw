@@ -20,6 +20,7 @@ func Example() {
 		mw.Recover,
 		mw.Logger,
 		mw.Chaotic("/chaotic"),
+		mw.Gzip,
 		mw.Headers(hs),
 	).Then(app)
 
